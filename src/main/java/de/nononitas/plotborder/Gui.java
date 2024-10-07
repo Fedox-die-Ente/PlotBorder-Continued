@@ -118,5 +118,14 @@ public class Gui {
         public String getType() {
             return type;
         }
+
+        public static Type findById(String id) {
+            for (Type type : values()) {
+                if (type.getType().equals(id)) {
+                    return type;
+                }
+            }
+            return null;
+        }
     }
 }

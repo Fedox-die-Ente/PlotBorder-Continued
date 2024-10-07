@@ -40,7 +40,7 @@ public class PlotBorderAPI {
 
         plot.getPlotModificationManager().setComponent(type, pattern, null, null);
 
-        String changedMessage = PlotBorder.getColoredConfigString(type + "-changed").replaceAll("%name%", type);
+        String changedMessage = PlotBorder.getColoredConfigString(type + "-changed").replaceAll("%name%", material);
         player.sendMessage(changedMessage);
 
         if (!player.hasPermission("plotborder.admin") && !player.hasPermission("plotborder.nocooldown." + type)) {
