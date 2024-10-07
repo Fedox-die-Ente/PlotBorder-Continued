@@ -30,17 +30,17 @@ public enum Heads {
         idTag = id;
     }
 
-    private static ItemStack createSkull(final String URL, String name) {
-
+    public static ItemStack createSkull(final String URL, String name) {
         String url = URL;
-        if(!url.contains("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv")) {
-            url = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv" + url;
+        if (!url.contains("http://textures.minecraft.net/texture/")) {
+            url = "http://textures.minecraft.net/texture/" + url;
         }
-        ItemStack head = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
+
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
 
-        GameProfile profile = new GameProfile(UUID.randomUUID(), "NotNullNotEmpty");
+        GameProfile profile = new GameProfile(UUID.randomUUID(), "CustomHead");
 
         profile.getProperties().put("textures", new Property("textures", url));
 
@@ -48,13 +48,12 @@ public enum Heads {
             Field profileField = headMeta.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
             profileField.set(headMeta, profile);
-
-        } catch (IllegalArgumentException | NoSuchFieldException | SecurityException | IllegalAccessException error) {
-            error.printStackTrace();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
         }
+
         headMeta.setDisplayName(name);
         head.setItemMeta(headMeta);
-
 
         return head;
     }
