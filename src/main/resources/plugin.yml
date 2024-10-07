@@ -1,8 +1,8 @@
 name: PlotBorder
 version: ${project.version}
 main: de.nononitas.plotborder.PlotBorder
-author: Nononitas
-api-version: 1.13
+authors: [Nononitas, Fedox]
+api-version: 1.21
 depend:
   - PlotSquared
 commands:

@@ -1,13 +1,9 @@
 package de.nononitas.plotborder;
 
 import de.nononitas.plotborder.util.Metrics;
-import de.nononitas.plotborder.util.Updater;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.PluginManager;
@@ -22,8 +18,6 @@ public class PlotBorder extends JavaPlugin {
     public static final String PREFIX = "§ePlotBorder §7» §r";
     public static final HashMap<UUID, Integer> guiPage = new HashMap<>();
     private static PlotBorder plugin;
-    public final String CONFIG_VERSION = "3";
-    public final String CURRENT_VERSION = this.getDescription().getVersion();
 
     public static String getColoredConfigString(String section) {
         String coloredString = getPlugin().getConfig().getString(section);
@@ -74,15 +68,8 @@ public class PlotBorder extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        String version = Bukkit.getServer().getClass().getPackage().getName();
-        version = version.substring(version.lastIndexOf('v'));
-
-        if (!version.contains("v1_14_R") && !version.contains("v1_13_R") && !version.contains("v1_15_R") &&
-                !version.contains("v1_16_R") && !version.contains("v1_17_R") && !version.contains("v1_18_R") && !version.contains("v1_19_R") && !version.contains("v1_20_R") ) {
-            this.getLogger().severe(ChatColor.RED + "Incompatible Version");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
+        // The plugin throw's a stack trace if the version is not supported, we don't need an extra check
+        //versionCheck();
 
         if (Bukkit.getPluginManager().getPlugin("PlotSquared") == null) {
             this.getLogger().info("§4Plugin disabled. Please install PlotSquared!");
@@ -98,27 +85,14 @@ public class PlotBorder extends JavaPlugin {
 
         createConfig();
         reloadConfig();
-        Updater.updateConfig();
         initEvents();
         initCmds();
         initBstats();
-        Updater.updatcheckConsole();
-
-
     }
 
     private void initEvents() {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new GUIListener(), this);
-        pm.registerEvents(new Listener() {
-            @EventHandler
-            public void Listener(PlayerJoinEvent event) {
-                Player p = event.getPlayer();
-                if (p.hasPermission("plotborder.admin") && PlotBorder.getPlugin().getConfig().getBoolean("update-notify")) {
-                    Updater.updatecheck(p, false);
-                }
-            }
-        }, this);
     }
 
     private void initCmds() {
@@ -154,8 +128,19 @@ public class PlotBorder extends JavaPlugin {
         Metrics metrics = new Metrics(this);
         metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> Bukkit.getOnlinePlayers().size()));
         metrics.addCustomChart(new Metrics.SingleLineChart("servers", () -> 1));
+    }
+
+    private void versionCheck() {
+        String version = Bukkit.getServer().getClass().getPackage().getName();
+        version = version.substring(version.lastIndexOf('v'));
 
 
+        if (!version.contains("v1_14_R") && !version.contains("v1_13_R") && !version.contains("v1_15_R") &&
+                !version.contains("v1_16_R") && !version.contains("v1_17_R") && !version.contains("v1_18_R") && !version.contains("v1_19_R") && !version.contains("v1_20_R") && !version.contains("v1_21_R")) {
+            this.getLogger().severe(ChatColor.RED + "Incompatible Version");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
     }
 
 

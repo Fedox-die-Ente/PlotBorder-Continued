@@ -1,6 +1,5 @@
 package de.nononitas.plotborder;
 
-import de.nononitas.plotborder.util.Updater;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,13 +24,6 @@ public class PlotBorderCmd implements CommandExecutor, TabCompleter {
                         sender.sendMessage(PlotBorder.PREFIX + "§cNo permissions");
                     }
                     break;
-                case "updatecheck":
-                    if(sender.hasPermission("plotborder.admin")) {
-                        Updater.updatecheck(sender, true);
-                    } else {
-                        sender.sendMessage(PlotBorder.PREFIX + "§cNo permissions");
-                    }
-                    break;
                 default:
                     break;
             }
@@ -49,7 +41,6 @@ public class PlotBorderCmd implements CommandExecutor, TabCompleter {
                 Player p = (Player) sender;
                 if(p.hasPermission("plotborder.admin")) {
                     commands.add("rl");
-                    commands.add("updatecheck");
                 }
 
             }

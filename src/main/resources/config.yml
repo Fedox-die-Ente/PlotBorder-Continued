@@ -1,6 +1,3 @@
-#Don't change!
-version : "3"
-
 #Max 5 rows
 gui-border-rows: 2
 gui-wall-rows: 2
