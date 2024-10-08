@@ -1,19 +1,27 @@
 package de.nononitas.plotborder;
 
-import de.nononitas.plotborder.util.Heads;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Gui {
+
+
     public static void openGui(Type guiType, Player p, int page) {
         String type = guiType.getType();
         FileConfiguration config = PlotBorder.getPlugin().getConfig();
@@ -57,17 +65,34 @@ public class Gui {
             inv.setItem(i, lastRowPlaceHolderItem);
         }
 
-        ItemStack arrowRight = Heads.WHITE_ARROW_RIGHT.getItemStack();
-        ItemStack arrowLeft = Heads.WHITE_ARROW_LEFT.getItemStack();
+        ItemStack arrowRight = new ItemStack(Material.PLAYER_HEAD);
+        ItemStack arrowLeft = new ItemStack(Material.PLAYER_HEAD);
+
         SkullMeta meta;
         if(PlotBorder.getPlugin().getConfig().getConfigurationSection(type + "-items").getKeys(false).size() - 1 > slot) {
             meta = (SkullMeta) arrowRight.getItemMeta();
+
+            OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString("50c8510b-5ea0-4d60-be9a-7d542d6cd156"));
+
+            PlayerProfile playerProfile;
+
+            playerProfile = player.getPlayerProfile().update().join();
+            meta.setOwnerProfile(playerProfile);
+
             meta.setDisplayName(PlotBorder.getColoredConfigString("page") + " " + (page + 2));
             arrowRight.setItemMeta(meta);
             inv.setItem(invSize - 1 + 7, arrowRight);
         }
         if(page != 0) {
             meta = (SkullMeta) arrowLeft.getItemMeta();
+
+            OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString("a68f0b64-8d14-4000-a95f-4b9ba14f8df9"));
+
+            PlayerProfile playerProfile;
+
+            playerProfile = player.getPlayerProfile().update().join();
+            meta.setOwnerProfile(playerProfile);
+
             meta.setDisplayName(PlotBorder.getColoredConfigString("page") + " " + page);
             arrowLeft.setItemMeta(meta);
             inv.setItem(invSize - 1 + 3, arrowLeft);
